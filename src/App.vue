@@ -13,14 +13,18 @@
       <menuRight 
         :class="{marR:rightmenu}"
         :data="data"
+        :save="isSaved"
         v-on="{
+          Save:Save, 
+          removeSave:removeSave,
           hide:hideMenu,
-          now:goArticle, 
+          goArticle:goArticle, 
           random:randomArticle, 
           today:getArticle}"
       ></menuRight>
 
-      <save v-on="{hide:showSave,go:goArticle}" :saveArticles="saveTotal"></save> 
+      <save v-on="{hide:showSave,go:goArticle}" :saveArticles="saveTotal"
+      :class="{hideSave:saveShow}"></save> 
       
       <setting
         v-on="{setSize:setSize, setNight:setNight,setBg: setBg}" :class="{hideSetting:setting}"></setting>
@@ -45,6 +49,7 @@ import menuLeft from '~/menu_left'
 import menuRight from '~/menu_right'
 import setting from '~/setting'
 import save from '~/save'
+import storage from '../static/storage'
 export default {
   name: 'app',
   data () {
@@ -54,11 +59,17 @@ export default {
       rightmenu: false,
       leftmenu: false,
       setting: false,
+      saveShow: false,
       saveTotal: [],
       night: false,
-      showS: false,
-      Ibg: '#fafafa',
-      right: 0
+      Ibg: '#fafafa'
+    }
+  },
+  created: function () {
+    if(storage.get('articles')){
+      if (storage.get('articles').length > 0) {
+      this.saveTotal = storage.get('articles')
+      }
     }
   },
   mounted: function () {
@@ -87,39 +98,8 @@ export default {
         console.log(err)
       })
     },
-    toggle: function (show) {
-      if(show == false){
-        this.$refs.app.style.left = 30 +'%'
-        this.show = true
-      } else {
-        this.$refs.app.style.left = 0 +'%'
-        this.show = false
-      }
-    },
-    hideMenu: function () {
-      if (this.rightmenu || this.leftmenu || this.setting) {
-        this.leftmenu = false
-        this.rightmenu = false
-        this.setting = false
-      }
-    },
-    rightMenus: function () {
-      this.rightmenu =! this.rightmenu
-    },
-    // 显示收藏
-    showSave () {
-      this.leftmenu = false
-      // this.showS = !this.showS
-    },
-  // 阅读设置
-    Setting () {
-      document.body.style.overflow = 'auto'
-      this.setting = true
-      this.leftmenu = false
-    },
-    goArticle (date) {
-      // this.showS = false
-      
+    goArticle (date) {  
+    console.log(date)   
       this.$ajax({
         method: 'get',
         baseURL: '/api/article',
@@ -150,11 +130,47 @@ export default {
         console.log(err)
       })
     },
-
-
-
-    // 阅读设置
+    // 组件显示隐藏
+    toggle: function (show) {
+      if(show == false){
+        this.$refs.app.style.left = 30 +'%'
+        this.show = true
+      } else {
+        this.$refs.app.style.left = 0 +'%'
+        this.show = false
+      }
+    },
+    hideMenu: function () {
+      if (this.rightmenu || this.leftmenu || this.setting) {
+        this.leftmenu = false
+        this.rightmenu = false
+        this.setting = false
+      }
+    },
+    rightMenus: function () {
+      this.rightmenu =! this.rightmenu
+    },
+    showSave () {
+      this.toggle()
+      this.saveShow =! this.saveShow
+    },
+  // 收藏
+    Save (data) {
+      console.log(this.saveTotal)
+      this.saveTotal.unshift(data)
+      storage.set('articals',this.saveTotal)
+    },
+    removeSave (data) {
+      for(let item in this.saveTotal){
+        if(this.saveTotal[item].title == data){
+          this.saveTotal.splice(item,1)
+        }
+      }
+      storage.set('articals',this.saveTotal)
+    },
+  // 阅读设置
     Setting () {
+      document.body.style.overflow = 'auto'
       this.setting = true
       this.toggle()
     },
@@ -164,14 +180,22 @@ export default {
     setBg (val) {
       this.night = false
       this.Ibg = val
-
-      
     },
     setNight () {
       this.night = !this.night
       this.night ? document.querySelector('.article').style.color = '#fff' :document.querySelector('.article').style.color = '#2c3e50'
     }
- }
+ },
+  computed: {
+    isSaved () {
+      for (let item in this.saveTotal) {
+        if (this.saveTotal[item].title === this.data.title) {
+          return true
+        }
+      }
+      return false
+    }
+  }
 
 }
 
@@ -183,7 +207,6 @@ export default {
 
 #app {
   position: relative;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -200,7 +223,7 @@ export default {
 }
 .title{
   padding-top: 1rem;
-  font-size: .3rem;
+  font-size: .4rem;
   font-weight: normal
 }
 .xian{
@@ -210,13 +233,13 @@ export default {
   box-shadow: 3px 1px rgb(207, 206, 206);
 }
 .author{
-  font-size: 0.1rem;
+  font-size: .15rem;
   color: #888888;
 }
 .content{
   padding: .2rem;
   text-indent: .4rem;
-  font-size: 0.25rem;
+  font-size: .3rem;
   text-align: left;
 }
 footer{
@@ -255,6 +278,9 @@ img{
   }
   .marR{
     right: 0 !important;
+  }
+  .hideSave{
+    left:0!important;
   }
 
 </style>

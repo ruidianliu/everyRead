@@ -1,11 +1,12 @@
 <template>
-  <div class="saveArticle">
+  <div class="saveArticle" >
+    
     <header>
     	<img src="../assets/back.png" @click="hideSave">
     </header>
     <div class="saveArticle_c">
     	<ul>
-    		<li v-for="item in saveArticles" @click="goArticle(item.data)">
+    		<li v-for="item in saveArticles" @click="goArticle(item.date)">
             <span class="title">{{ item.title }}</span>
             <span class="author">{{ item.author }}</span>  
         </li>
@@ -24,7 +25,8 @@ export default {
   },
   methods: {
     goArticle (data) {
-      this.$emit('go',data)
+      this.$emit('go',data.curr)
+      this.hideSave()
     },
     hideSave () {
       this.$emit('hide')
@@ -38,16 +40,17 @@ export default {
   .saveArticle{
     position: fixed;
     box-sizing: border-box;
-    top: 10%;
     background: #fafafa;
     width: 100%;
     height: 100%;
     font-size: .35rem;
-    opacity: 0;
-    left: 100%;
-    transition:opacity .3s,top .3s, left 0s .3s;  }
-   #header{
+    left: -100%;
+    transition:all .3s; 
+    z-index: 99;
+  }
+  header{
     position: absolute;
+    padding: .2rem;
   }
   .saveArticle_c{
     box-sizing: border-box;

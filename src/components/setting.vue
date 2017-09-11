@@ -29,7 +29,7 @@ export default {
   data () {
     return {
     	fontSize: [
-        {content: '小', val: '.25rem'},
+        {content: '小', val: '.3rem'},
         {content: '中', val: '.35rem'},
     		{content: '大', val: '.4rem'}
     	],

@@ -2,7 +2,7 @@
   <div class="menuRight on" @click="hide">
       <div class="rightContent on"  @click.stop>
         <div @click="Save" class="save">
-          <img src="../../src/assets/收 藏.png" v-if="saved">
+          <img src="../../src/assets/收 藏.png" v-if="save">
           <img src="../../src/assets/收 藏 (1).png" v-else>
             收藏
         </div>
@@ -31,18 +31,30 @@
 <script>
 export default {
   name: 'menuRight',
-  props: ['data'],
+  props: ['data','save'],
   data () {
     return {
-      saved: this.save
+      isSave: this.save
     }
   },
   methods: {
-    Save () {
+    Save (data) {
+      this.isSave =! this.isSave
+       if (this.isSave) {
+        var saveArticle = {}
+        saveArticle = this.data
+  
 
+        console.log(saveArticle+'aaa')
+        this.$emit('Save', saveArticle)
+        this.hide()
+      } else {
+        this.$emit('removeSave', this.data.title)
+        this.hide()
+      }
     },
     goPrev () {
-      this.$emit('now',this.data.date.prev)
+      this.$emit('goArticle',this.data.date.prev)
       this.hide()
     },
     goRandom () {
@@ -50,11 +62,11 @@ export default {
       this.hide()
     },
     goNext () {
-      if(new Date().Format('yyyyMMdd') <= this.data.date.next){
+      if(new Date().Format('yyyyMMdd') < this.data.date.next){
         alert("已经是最新的文章了")
         return
       }
-      this.$emit('now',this.data.date.next)
+      this.$emit('goArticle',this.data.date.next)
       this.hide()
     },
     goToday () {
