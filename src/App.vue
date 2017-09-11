@@ -164,10 +164,12 @@ export default {
     setBg (val) {
       this.night = false
       this.Ibg = val
+
+      
     },
     setNight () {
       this.night = !this.night
-      this.night ? document.querySelector('.article').style.color = '#fff' :document.querySelector('.article').style.color = '#000'
+      this.night ? document.querySelector('.article').style.color = '#fff' :document.querySelector('.article').style.color = '#2c3e50'
     }
  }
 

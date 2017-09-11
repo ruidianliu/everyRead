@@ -33,7 +33,7 @@ export default {
         {content: '中', val: '.35rem'},
     		{content: '大', val: '.4rem'}
     	],
-      bg: ['#fafafa','rgb(235, 249, 235)','rgb(241,129,201)','rgb(153, 214, 246)'],
+      bg: ['#fafafa','rgb(214, 153, 63)','rgb(241,129,201)','rgb(153, 214, 246)'],
       defaultSize: 0,
       defaultBg: 0,
       night:false
