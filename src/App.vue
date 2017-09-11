@@ -150,6 +150,9 @@ export default {
         console.log(err)
       })
     },
+
+
+
     // 阅读设置
     Setting () {
       this.setting = true
@@ -166,7 +169,11 @@ export default {
       this.night = !this.night
       this.night ? document.querySelector('.article').style.color = '#fff' :document.querySelector('.article').style.color = '#000'
     }
+
+
+
   }
+   
 }
 </script>
 
