@@ -169,12 +169,11 @@ export default {
       this.night = !this.night
       this.night ? document.querySelector('.article').style.color = '#fff' :document.querySelector('.article').style.color = '#000'
     }
+ }
 
-
-
-  }
-   
 }
+
+
 </script>
 
 <style scoped>
