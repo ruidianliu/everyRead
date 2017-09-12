@@ -1,7 +1,12 @@
-# every_read
+# 每日一文
 
-> A Vue.js project
+> 一个使用了Vue全家桶的进阶项目
 
+## 技术栈
+
+> Vue2 + Vue-router + axios + Vuex + webpack + ES6/ES7 + babel + Vue-loader + node.js +npm
+
+<a href='http://www.qdkj520.com/mryw' target="_blank">示例</a>
 ## Build Setup
 
 ``` bash
